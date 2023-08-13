@@ -31,13 +31,18 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyReadonly<T> = any
+type MyReadonly<Type> = {
+  readonly [Key in keyof Type]: Type[Key]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+type ActualResult = MyReadonly<Todo1>
+type ExpectedResult = Readonly<Todo1>
+
 type cases = [
-  Expect<Equal<MyReadonly<Todo1>, Readonly<Todo1>>>,
+  Expect<Equal<ActualResult, ExpectedResult>>
 ]
 
 interface Todo1 {

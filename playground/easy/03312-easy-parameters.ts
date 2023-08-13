@@ -20,14 +20,22 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyParameters<T extends (...args: any[]) => any> = any
+type MyParameters<T> = T extends (...args: infer Args) => unknown ? Args : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
+// @ts-expect-error
 const foo = (arg1: string, arg2: number): void => {}
+
+// @ts-expect-error
 const bar = (arg1: boolean, arg2: { a: 'A' }): void => {}
+
 const baz = (): void => {}
+
+type FooType = typeof foo
+
+type fooParametersType = MyParameters<typeof foo>
 
 type cases = [
   Expect<Equal<MyParameters<typeof foo>, [string, number]>>,

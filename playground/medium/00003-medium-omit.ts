@@ -45,9 +45,6 @@ type cases = [
 // @ts-expect-error
 type error = MyOmit<Todo, 'description' | 'invalid'>
 
-type Foo = MyOmit<Todo, 'description' | 'completed'>
-type Bar = keyof Todo
-
 interface Todo {
   title: string
   description: string

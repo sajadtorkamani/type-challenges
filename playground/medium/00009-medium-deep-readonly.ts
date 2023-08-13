@@ -36,7 +36,13 @@
 
 /* _____________ Your Code Here _____________ */
 
-type DeepReadonly<T> = any
+type IsPrimitive<T> = keyof T extends never ? true : false
+
+type DeepReadonly<T> = {
+  readonly [P in keyof T]: IsPrimitive<T[P]> extends true
+    ? T[P]
+    : DeepReadonly<T[P]>
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -45,6 +51,8 @@ type cases = [
   Expect<Equal<DeepReadonly<X1>, Expected1>>,
   Expect<Equal<DeepReadonly<X2>, Expected2>>,
 ]
+
+type X1Type = DeepReadonly<X1>
 
 type X1 = {
   a: () => 22

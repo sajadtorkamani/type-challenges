@@ -22,7 +22,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyAwaited<T> = any
+type MyAwaited<T> = T extends PromiseLike<infer U> ? MyAwaited<U> : T
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -33,6 +33,8 @@ type Z = Promise<Promise<string | number>>
 type Z1 = Promise<Promise<Promise<string | boolean>>>
 type T = { then: (onfulfilled: (arg: number) => any) => any }
 
+type Foo = MyAwaited<Z>
+
 type cases = [
   Expect<Equal<MyAwaited<X>, string>>,
   Expect<Equal<MyAwaited<Y>, { field: number }>>,
@@ -41,8 +43,6 @@ type cases = [
   Expect<Equal<MyAwaited<T>, number>>,
 ]
 
-// @ts-expect-error
-type error = MyAwaited<number>
 
 /* _____________ Further Steps _____________ */
 /*

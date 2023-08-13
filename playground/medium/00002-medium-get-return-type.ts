@@ -25,7 +25,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyReturnType<T> = any
+type MyReturnType<T extends (...args: any[]) => any> = T extends (
+  ...args: any[]
+) => infer R
+  ? R
+  : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -46,8 +50,9 @@ type ComplexObject = {
   prev(): number
 }
 
-const fn = (v: boolean) => v ? 1 : 2
-const fn1 = (v: boolean, w: any) => v ? 1 : 2
+const fn = (v: boolean) => (v ? 1 : 2)
+// @ts-expect-error
+const fn1 = (v: boolean, w: any) => (v ? 1 : 2)
 
 /* _____________ Further Steps _____________ */
 /*
